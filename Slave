@@ -1,0 +1,36 @@
+#include <Wire.h>
+#include <Adafruit_LiquidCrystal.h>
+
+Adafruit_LiquidCrystal lcd(0);  
+
+int buzzerPin = 7;
+
+void setup() {
+  Serial.begin(9600);
+
+  lcd.begin(16, 2);
+  lcd.print("Filling Up");
+
+  pinMode(buzzerPin, OUTPUT);
+  digitalWrite(buzzerPin, LOW);
+}
+
+void loop() {
+  if (Serial.available()) {
+    String msg = Serial.readStringUntil('\n');
+    msg.trim();
+
+    if (msg == "FULL") {
+
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Bag is Full");
+      lcd.setCursor (0, 0);
+      lcd.print("Patient Room #");
+
+      tone(buzzerPin, 1000);   
+      delay(2000);
+      noTone(buzzerPin);       
+    }
+  }
+}
